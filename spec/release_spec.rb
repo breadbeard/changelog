@@ -15,18 +15,16 @@ module Changelog
         rls = Release.new('CL.0.1.20120120.0')
         rls.previous_tag.should be_nil
       end
-
     end
-  
-    
-    
-    describe "#log" do
 
-      it "should log" do
+    describe "#listings" do
+      
+      it "returns the release's commit listings" do
         rls = Release.new('CL.0.1.20120120.1')
-        rls.log.size.should == 3
+        rls.listings.size.should == 3
       end
     end
+
   end
 
 end

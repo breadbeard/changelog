@@ -11,8 +11,14 @@ module Changelog
       tag_index == 0 ? nil : tags[tag_index -1]
     end
 
-    def log
-      ["log", "log", "log"]
+    def listings
+      release =   Changelog.repo.commits(@tag).map {|c| c.id}
+      previous =  Changelog.repo.commits(previous_tag).map {|c| c.id}
+
+      release - previous
+
+      puts release.inspect
+      puts previous.inspect
     end
   end
 end

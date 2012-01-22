@@ -16,10 +16,15 @@ module Changelog
     end
 
     def githubify_id
-      owner = "dvantuyl"
-      project = "changelog"
 
-      "[#{id[0,7]}](https://github.com/#{owner}/#{project}/#{id[0,7]})"
+      if Changelog.github?
+        owner   = Changelog.github_owner
+        project = Changelog.github_project
+
+        "[#{id[0,7]}](https://github.com/#{owner}/#{project}/#{id[0,7]})"
+      else
+        "#{id[0,7]}"
+      end
     end
   end
 end
