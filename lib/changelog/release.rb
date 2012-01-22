@@ -6,19 +6,25 @@ module Changelog
     end
 
     def previous_tag
+      @previous_tag ||= _previous_tag
+    end
+
+    def _previous_tag
       tags = Changelog.repo.tags.map {|tag| tag.name}
       tag_index = tags.index(@tag)
       tag_index == 0 ? nil : tags[tag_index -1]
     end
 
     def listings
-      release =   Changelog.repo.commits(@tag).map {|c| c.id}
-      previous =  Changelog.repo.commits(previous_tag).map {|c| c.id}
+      @listings ||= _listings
+    end
 
-      release - previous
+    def _listings
+      ref = (previous_tag ? "#{previous_tag}..#{@tag}" : @tag)
 
-      puts release.inspect
-      puts previous.inspect
+      Changelog.repo.commits(ref).map { |commit|
+        Listing.create(Changelog.repo, :id => commit.id)
+      }
     end
   end
 end

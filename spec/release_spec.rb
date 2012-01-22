@@ -22,6 +22,9 @@ module Changelog
       it "returns the release's commit listings" do
         rls = Release.new('CL.0.1.20120120.1')
         rls.listings.size.should == 3
+        rls.listings[0].message.should == "Fixes ENG-6580. Test JIRA tag"
+        rls.listings[1].message.should == "Test non-JIRA tag"
+        rls.listings[2].message.should == "ENG-4744: Test JIRA Tag"
       end
     end
 

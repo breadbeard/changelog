@@ -21,9 +21,9 @@ module Changelog
         owner   = Changelog.github_owner
         project = Changelog.github_project
 
-        "[#{id[0,7]}](https://github.com/#{owner}/#{project}/#{id[0,7]})"
+        "[#{id_abbrev}](https://github.com/#{owner}/#{project}/#{id_abbrev})"
       else
-        "#{id[0,7]}"
+        "#{id_abbrev}"
       end
     end
   end
