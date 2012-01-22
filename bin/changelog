@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'methadone'
+require 'changelog'
+
+include Methadone::Main
+
+main do # Add args you want: |release|
+
+	rls = Release.new(release)
+	rls.commits.each do |commit|
+		puts commit
+	end
+end
+
+options[:repo] = "./.git"
+
+description "Generate markdown formatted changelog from your git revision tags"
+
+on("-r REPO","--repo","Path to your git repository")
+
+arg :release, :required
+arg :repo, :optional
+
+version Changelog::VERSION
+
+go!
