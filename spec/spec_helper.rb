@@ -12,6 +12,6 @@ RSpec.configure do |config|
   config.filter_run :focus
 
   config.before(:each) do
-    Changelog.repo_path = File.join(File.dirname(__FILE__), *%w[dot_git])
+     Changelog.repo_path = File.join(File.dirname(__FILE__), *%w[dot_git])
   end
 end

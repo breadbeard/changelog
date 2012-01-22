@@ -1,6 +1,10 @@
 require 'rubygems'
 require 'grit'
 
+require "changelog/version"
+require "changelog/release"
+require "changelog/listing"
+
 module Changelog
 
   class << self
@@ -12,6 +16,4 @@ module Changelog
   end
 
 end
-require "changelog/version"
-require "changelog/release"
 
