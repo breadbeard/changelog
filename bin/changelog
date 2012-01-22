@@ -6,15 +6,17 @@ require 'changelog'
 
 include Methadone::Main
 
-main do # Add args you want: |release|
+main do |release|
 
-	rls = Release.new(release)
-	rls.commits.each do |commit|
-		puts commit
+  Changelog.repo_path = File.expand_path(options[:repo])
+
+	rls = Changelog::Release.new(release)
+	rls.listings.each do |listing|
+		puts listing
 	end
 end
 
-options[:repo] = "./.git"
+options[:repo] = ".git"
 
 description "Generate markdown formatted changelog from your git revision tags"
 
