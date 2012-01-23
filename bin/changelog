@@ -3,6 +3,8 @@
 require 'optparse'
 require 'methadone'
 require 'highline/import'
+require 'redcarpet/compat'
+require 'file'
 require 'changelog'
 
 include Methadone::Main
@@ -22,13 +24,23 @@ main do |release|
 		release = ask("Next release tag (last: #{rls.previous_tag}) > ")
 	end
 
-	puts "\n#{Changelog::Header.new(release)}\n"
+	output = "\n#{Changelog::Header.new(release)}\n\n"
 
 	rls.listings.each do |listing|
-		puts listing
+		output += "#{listing}\n"
 	end
 
-	print "\n"
+	if options[:html]
+		output = Markdown.new(output).to_html
+	end
+
+	if options[:file]
+		file_path = File.expand_path(options[:file])
+	  File.prepend(file_path, output)
+	else
+	  puts output
+	end
+
 end
 
 options[:repo] = ".git"
@@ -36,11 +48,12 @@ options[:repo] = ".git"
 description "Generate markdown formatted changelog from your git revision tags"
 
 on("-r REPO","--repo","Path to your git repository")
-on("-m","--markdown","Output markdown formated")
+on("-h","--html","Render html")
+on("-f FILE","--file", "Prepend to file")
 
 arg :release, :required
 arg :repo, :optional
-arg :markdown, :optional
+arg :html, :optional
 
 version Changelog::VERSION
 
