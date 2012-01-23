@@ -9,19 +9,14 @@ module Changelog
     end
 
     def jirafy_message
-      jira_base = "https://windermeresolutions.atlassian.net"
       key_pattern = /([A-Z]+-\d+)/
 
-      message.gsub(key_pattern, '[\1](' + jira_base + '/browse/\1)')
+      message.gsub(key_pattern, '[\1](' + Changelog.jira_base + '/browse/\1)')
     end
 
     def githubify_id
-
       if Changelog.github?
-        owner   = Changelog.github_owner
-        project = Changelog.github_project
-
-        "[#{id_abbrev}](https://github.com/#{owner}/#{project}/#{id_abbrev})"
+        "[#{id_abbrev}](#{Changelog.github_base}/#{id_abbrev})"
       else
         "#{id_abbrev}"
       end

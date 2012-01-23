@@ -1,18 +1,31 @@
 module Changelog
   class Release
 
+    attr_accessor :tag
+
     def initialize(tag)
       @tag = tag
+      raise "Tag not found" unless tag_index || is_head?
+    end
+
+    def tags
+      @tags ||= Changelog.repo.tags.map {|t| t.name}
+    end
+
+    def tag_index
+      @tag_index ||= tags.index(tag)
+    end
+
+    def is_head?
+      tag == 'HEAD'
     end
 
     def previous_tag
-      @previous_tag ||= _previous_tag
+      @previous_tag ||= (previous_tag_index >= 0 ? tags[previous_tag_index] : nil)
     end
 
-    def _previous_tag
-      tags = Changelog.repo.tags.map {|tag| tag.name}
-      tag_index = tags.index(@tag)
-      tag_index == 0 ? nil : tags[tag_index -1]
+    def previous_tag_index
+      @previous_tag_index ||= (is_head? ? tags.size - 1 : tag_index - 1)
     end
 
     def listings
@@ -20,7 +33,7 @@ module Changelog
     end
 
     def _listings
-      ref = (previous_tag ? "#{previous_tag}..#{@tag}" : @tag)
+      ref = (previous_tag ? "#{previous_tag}..#{tag}" : tag)
 
       Changelog.repo.commits(ref).map { |commit|
         Listing.create(Changelog.repo, :id => commit.id)

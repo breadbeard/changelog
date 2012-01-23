@@ -3,6 +3,11 @@ require 'spec_helper'
 module Changelog
   describe Release do
 
+    describe ".new" do
+      it "raises exception if tag doesn't exist" do
+        lambda { Release.new('bogus') }.should raise_error
+      end
+    end
 
     describe "#previous_tag" do
 
@@ -15,10 +20,16 @@ module Changelog
         rls = Release.new('CL.0.1.20120120.0')
         rls.previous_tag.should be_nil
       end
+
+      it "returns the last tag before HEAD" do
+        rls = Release.new('HEAD')
+        rls.previous_tag.should == 'CL.0.1.20120120.1'
+      end
+
     end
 
     describe "#listings" do
-      
+
       it "returns the release's commit listings" do
         rls = Release.new('CL.0.1.20120120.1')
         rls.listings.size.should == 3
