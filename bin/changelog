@@ -19,16 +19,16 @@ main do |release|
 	rls = Changelog::Release.new(release)
 	
 	if release == 'HEAD'
-		release = ask("Next release tag [last: rls.previous_tag]> ")
+		release = ask("Next release tag (last: #{rls.previous_tag}) > ")
 	end
 
-	puts "#{Changelog::Header.new(release)}\n"
+	puts "\n#{Changelog::Header.new(release)}\n"
 
 	rls.listings.each do |listing|
 		puts listing
 	end
 
-	puts "\n"
+	print "\n"
 end
 
 options[:repo] = ".git"
