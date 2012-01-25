@@ -1,11 +1,17 @@
 module Changelog
-  class Release
+  class Release < Mustache
+    self.template_file = File.join(File.dirname(__FILE__), "../../templates/release.mustache")
 
-    attr_accessor :tag
+    attr_accessor :tag, :display_tag
 
     def initialize(tag)
       @tag = tag
+      @display_tag = tag
       raise "Tag not found" unless tag_index || is_head?
+    end
+
+    def github_base
+      Changelog.github_base
     end
 
     def tags

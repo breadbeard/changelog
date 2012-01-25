@@ -1,10 +1,10 @@
 require 'rubygems'
 require 'grit'
+require 'mustache'
 
 require "changelog/version"
 require "changelog/release"
 require "changelog/listing"
-require "changelog/header"
 
 module Changelog
 

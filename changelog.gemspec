@@ -28,4 +28,5 @@ Gem::Specification.new do |s|
   s.add_dependency('methadone')
   s.add_dependency('grit')
   s.add_dependency('redcarpet')
+  s.add_dependency('mustache')
 end

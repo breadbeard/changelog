@@ -21,14 +21,10 @@ main do |release|
 	rls = Changelog::Release.new(release)
 	
 	if release == 'HEAD'
-		release = ask("Next release tag (last: #{rls.previous_tag}) > ")
+		rls.display_tag = ask("Next release tag (last: #{rls.previous_tag}) > ")
 	end
 
-	output = "\n#{Changelog::Header.new(release)}\n\n"
-
-	rls.listings.each do |listing|
-		output += "#{listing}\n"
-	end
+	output = rls.render
 
 	if options[:html]
 		output = Markdown.new(output).to_html
