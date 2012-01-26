@@ -22,6 +22,7 @@ main do |release|
 	
 	if release == 'HEAD'
 		rls.display_tag = ask("Next release tag (last: #{rls.previous_tag}) > ")
+
 	end
 
 	output = rls.render
