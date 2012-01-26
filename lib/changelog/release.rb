@@ -41,9 +41,11 @@ module Changelog
     def _listings
       ref = (previous_tag ? "#{previous_tag}..#{tag}" : tag)
 
-      Changelog.repo.commits(ref).map { |commit|
+      listings = Changelog.repo.commits(ref).map { |commit|
         Listing.create(Changelog.repo, :id => commit.id)
       }
+
+      listings.reject {|l| l.message =~ /Merge/ }
     end
   end
 end
