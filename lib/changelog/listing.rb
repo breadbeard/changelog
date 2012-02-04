@@ -6,7 +6,7 @@ module Changelog
     def jirafy_message
       key_pattern = /([A-Z]+-\d+)/
 
-      message.gsub(key_pattern, '[\1](' + Changelog.jira_base + '/browse/\1)')
+      short_message.gsub(key_pattern, '[\1](' + Changelog.jira_base + '/browse/\1)')
     end
 
     def github_base

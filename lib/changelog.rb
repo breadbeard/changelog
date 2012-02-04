@@ -12,7 +12,7 @@ module Changelog
     attr_accessor :repo_path
 
     def repo
-      @repo ||= Grit::Repo.new(repo_path, :is_bare => true)
+      @repo ||= Grit::Repo.new(repo_path)
     end
 
     def remote_url

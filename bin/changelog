@@ -2,36 +2,37 @@
 
 require 'optparse'
 require 'methadone'
-require 'highline/import'
 require 'redcarpet/compat'
 require 'file'
 require 'changelog'
+require 'launchy'
+
 
 include Methadone::Main
 
-main do |release|
-
-	# upcase head
-	release = 'HEAD' if release == 'head' || release == 'next'
+main do |tag|
 
 	# set repo path
   Changelog.repo_path = File.expand_path(options[:repo])
 
 	# set release
-	rls = Changelog::Release.new(release)
-	
-	if release == 'HEAD'
-		rls.display_tag = ask("Next release tag (last: #{rls.previous_tag}) > ")
-
-	end
+	rls = Changelog::Release.new(tag)
 
 	output = rls.render
 
 	if options[:html]
+		style = '<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">'
 		output = Markdown.new(output).to_html
-	end
+	  html_path = File.expand_path("changelog.html")
 
-	if options[:file]
+		File.open(html_path, 'w') do |file|
+			file.write(style)
+			file.write("\n\n")
+			file.write(output)
+		end
+
+		Launchy.open("file://localhost/#{html_path}")
+	elsif options[:file]
 		file_path = File.expand_path(options[:file])
 	  File.prepend(file_path, output)
 	else
@@ -48,9 +49,10 @@ on("-r REPO","--repo","Path to your git repository")
 on("-h","--html","Render html")
 on("-f FILE","--file", "Prepend to file")
 
-arg :release, :required
-arg :repo, :optional
-arg :html, :optional
+arg :tag,   :optional
+arg :repo, 	:optional
+arg :html, 	:optional
+arg :file, 	:optional
 
 version Changelog::VERSION
 

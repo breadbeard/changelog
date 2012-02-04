@@ -1,9 +1,9 @@
 PATH
   remote: .
   specs:
-    changelog (0.0.1)
+    changelog (0.1.1)
       grit
-      highline
+      launchy
       methadone
       mustache
       redcarpet
@@ -11,6 +11,7 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
+    addressable (2.2.6)
     aruba (0.4.11)
       childprocess (>= 0.2.3)
       cucumber (>= 1.1.1)
@@ -32,8 +33,9 @@ GEM
     grit (2.4.1)
       diff-lcs (~> 1.1)
       mime-types (~> 1.15)
-    highline (1.6.11)
     json (1.6.5)
+    launchy (2.0.5)
+      addressable (~> 2.2.6)
     methadone (0.5.1)
       bundler
     mime-types (1.17.2)

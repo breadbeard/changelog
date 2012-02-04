@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rdoc')
   s.add_development_dependency('aruba')
   s.add_development_dependency('rake','~> 0.9.2')
-  s.add_dependency('highline')
+  s.add_dependency('launchy')
   s.add_dependency('methadone')
   s.add_dependency('grit')
   s.add_dependency('redcarpet')

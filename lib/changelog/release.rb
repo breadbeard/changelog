@@ -2,36 +2,33 @@ module Changelog
   class Release < Mustache
     self.template_file = File.join(File.dirname(__FILE__), "../../templates/release.mustache")
 
-    attr_accessor :tag, :display_tag
-
-    def initialize(tag)
+    def initialize(tag = nil)
       @tag = tag
-      @display_tag = tag
-      raise "Tag not found" unless tag_index || is_head?
     end
 
     def github_base
       Changelog.github_base
     end
 
-    def tags
-      @tags ||= Changelog.repo.tags.map {|t| t.name}
+    def last_tag
+      @last_tag ||= `git describe --abbrev=0`.strip
     end
 
-    def tag_index
-      @tag_index ||= tags.index(tag)
+    def tag
+      @tag ||= _tag
     end
 
-    def is_head?
-      tag == 'HEAD'
-    end
+    def _tag
+      proj, maj, mnr, yyyy, mm, dd, hf = last_tag.scan(/(\w+)\.(\d+)\.(\d+)\.(\d{4})(\d{2})(\d{2})\.(\d+)/).first
 
-    def previous_tag
-      @previous_tag ||= (previous_tag_index >= 0 ? tags[previous_tag_index] : nil)
-    end
+      now = Time.now.to_a
+      if now[5] == yyyy.to_i && now[4] == mm.to_i && now[3] == dd.to_i
+        hf = hf + 1
+      else
+        hf = 0
+      end
 
-    def previous_tag_index
-      @previous_tag_index ||= (is_head? ? tags.size - 1 : tag_index - 1)
+      "#{proj}.#{maj}.#{mnr}.#{now[5]}#{"%02d" % now[4]}#{"%02d" % now[3]}.#{hf}"
     end
 
     def listings
@@ -39,13 +36,13 @@ module Changelog
     end
 
     def _listings
-      ref = (previous_tag ? "#{previous_tag}..#{tag}" : tag)
 
-      listings = Changelog.repo.commits(ref).map { |commit|
+      listings = Changelog.repo.commits_between(last_tag, "HEAD").map { |commit|
         Listing.create(Changelog.repo, :id => commit.id)
       }
 
       listings.reject {|l| l.message =~ /Merge/ }
+              .sort { |x,y| x.author.to_s <=> y.author.to_s }
     end
   end
 end
