@@ -21,7 +21,7 @@ main do |tag|
 	output = rls.render
 
 	if options[:html]
-		style = '<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">'
+		style = '<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap.min.css">'
 		output = Markdown.new(output).to_html
 	  html_path = File.expand_path("changelog.html")
 
